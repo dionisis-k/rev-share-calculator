@@ -26,7 +26,7 @@ Make sure you have the following installed:
 Start by cloning the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/revenue-calculator.git
+git clone https://github.com/dionisis-k/rev-share-calculator.git
 
 cd revenue-calculator
 
