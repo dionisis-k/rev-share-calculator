@@ -4,14 +4,14 @@
 
     <h1>Revenue Share Calculator</h1>
 
-    <!-- Revenue Section -->
+    <!-- Gobbler Revenue -->
     <div class="card revenue-card">
       <label for="daily_revenue">Gobbler Daily Revenue:</label>
-      <input type="number" v-model.number="dailyRevenue" id="daily_revenue" min="0" step="0.01"
+      <input v-model.number="dailyRevenue" type="number" id="daily_revenue" min="0" step="0.01"
         placeholder="Please enter daily revenue" required />
     </div>
 
-    <!-- Holdings Section -->
+    <!-- Tokens -->
     <div class="holdings">
       <!-- Token 1 -->
       <div class="card holdings-card">
@@ -24,7 +24,7 @@
 
         <!-- User staked supply -->
         <label for="token1_user_staked">Your Staked $FOMO3D Tokens:</label>
-        <input type="number" v-model.number="tokens.token1.userStaked" id="token1_user_staked" min="0" step="0.01"
+        <input v-model.number="tokens.token1.userStaked" type="number" id="token1_user_staked" min="0" step="0.01"
           placeholder="Enter your staked amount" />
       </div>
 
@@ -34,12 +34,12 @@
 
         <!-- Total staked supply -->
         <label for="token2_total_staked">Total Staked $PET Tokens:</label>
-        <input type="number" v-model.number="tokens.token2.totalStaked" id="token2_total_staked" min="0" step="0.01"
+        <input v-model.number="tokens.token2.totalStaked" type="number" id="token2_total_staked" min="0" step="0.01"
           placeholder="Total staked tokens" required />
 
         <!-- User staked supply -->
         <label for="token2_user_staked">Your Staked $PET Tokens:</label>
-        <input type="number" v-model.number="tokens.token2.userStaked" id="token2_user_staked" min="0" step="0.01"
+        <input v-model.number="tokens.token2.userStaked" type="number" id="token2_user_staked" min="0" step="0.01"
           placeholder="Enter your staked amount" />
       </div>
 
@@ -49,12 +49,12 @@
 
         <!-- Total staked supply -->
         <label for="token3_total_staked">Total Staked NFTs:</label>
-        <input type="number" v-model.number="tokens.token3.totalStaked" id="token3_total_staked" min="0" step="1"
+        <input v-model.number="tokens.token3.totalStaked" type="number" id="token3_total_staked" min="0" step="1"
           placeholder="Enter total staked NFTs" required />
 
         <!-- User staked supply -->
         <label for="token3_user_staked">Your Staked NFTs:</label>
-        <input type="number" v-model.number="tokens.token3.userStaked" id="token3_user_staked" min="0" step="1"
+        <input v-model.number="tokens.token3.userStaked" type="number" id="token3_user_staked" min="0" step="1"
           placeholder="Enter your staked NFTs" />
       </div>
     </div>
@@ -63,14 +63,34 @@
     <button @click="calculateRevenue">Calculate</button>
 
     <!-- Result Section -->
-    <div v-if="calculated">
-      <div class="result">
-        <h2>Calculated Revenue Share:</h2>
-        <label>Token 1 Revenue: ${{ token1Revenue.toFixed(2) }}</label>
-        <label>Token 2 Revenue: ${{ token2Revenue.toFixed(2) }}</label>
-        <label>Token 3 Revenue: ${{ token3Revenue.toFixed(2) }}</label>
-        <label>Total Daily Revenue: ${{ totalRevenue.toFixed(2) }}</label>
-      </div>
+    <div v-if="calculated" class="result">
+      <h2>Calculated Revenue Share</h2>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Your Share ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$FOMO3D</td>
+            <td>{{ token1Revenue.toFixed(2) }}</td>
+          </tr>
+          <tr>
+            <td>$PET</td>
+            <td>{{ token2Revenue.toFixed(2) }}</td>
+          </tr>
+          <tr>
+            <td>NFTs</td>
+            <td>{{ token3Revenue.toFixed(2) }}</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Daily Revenue</strong></td>
+            <td><strong>${{ totalRevenue.toFixed(2) }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -253,42 +273,83 @@ label {
   height: auto;
 }
 
+.results-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  font-size: 1rem;
+  text-align: left;
+  color: #e3e3e3;
+}
+
+.results-table thead {
+  background-color: #6a00ff;
+  color: white;
+}
+
+.results-table th, 
+.results-table td {
+  padding: 12px;
+  border: 1px solid #444;
+}
+
+.results-table tbody tr:nth-child(odd) {
+  background-color: #2d2d33;
+}
+
+.results-table tbody tr:nth-child(even) {
+  background-color: #25252a;
+}
+
+.results-table .total-row {
+  background-color: #1a1a1d;
+  font-weight: bold;
+}
+
+.results-table .total-row td {
+  border-top: 2px solid #6a00ff;
+}
+
+.results-table tbody tr:hover {
+  background-color: #3a3a42;
+}
+
 /* Media Query for Responsiveness */
 @media screen and (max-width: 768px) {
   .container {
-      max-width: 90%;
-      padding: 20px;
+    max-width: 90%;
+    padding: 20px;
   }
 
   .holdings {
-      flex-direction: column;
-      gap: 20px;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .holdings-card {
-      width: 100%;
+    width: 100%;
   }
 
   .holdings-card img {
-      max-width: 60%;
+    max-width: 60%;
   }
 
   button {
-      width: 80%;
+    width: 80%;
   }
 }
 
 @media screen and (max-width: 480px) {
   h1 {
-      font-size: 1.5rem;
+    font-size: 1.5rem;
   }
 
   label {
-      font-size: 0.9rem;
+    font-size: 0.9rem;
   }
 
   input[type="number"] {
-      padding: 8px;
+    padding: 8px;
   }
 }
 </style>
