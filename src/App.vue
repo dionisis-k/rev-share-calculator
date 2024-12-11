@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!-- <img src="/img/fomo3d-logo.jpeg" alt="Logo" class="logo-image" /> -->
+    <img src="../public/fomo3d-logo.jpeg" alt="Logo" class="logo-image" />
 
     <h1>Revenue Share Calculator</h1>
 
@@ -15,7 +15,7 @@
     <div class="holdings">
       <!-- Token 1 -->
       <div class="card holdings-card">
-        <!-- <img src="@/assets/fomo3d.jpg" alt="Token 1 Logo" /> -->
+        <img src="../public/fomo3d.jpg" alt="Token 1 Logo" />
 
         <!-- Total staked supply -->
         <label for="token1_total_staked">Total Staked $FOMO3D Tokens:</label>
@@ -30,7 +30,7 @@
 
       <!-- Token 2 -->
       <div class="card holdings-card">
-        <!-- <img src="@/assets/pet.jpg" alt="Token 2 Logo" /> -->
+        <img src="../public/pet.jpg" alt="Token 2 Logo" />
 
         <!-- Total staked supply -->
         <label for="token2_total_staked">Total Staked $PET Tokens:</label>
@@ -45,7 +45,7 @@
 
       <!-- Token 3 -->
       <div class="card holdings-card">
-        <!-- <img src="@/assets/mage.jpg" alt="Token 3 Logo" /> -->
+        <img src="../public/mage.jpg" alt="Token 3 Logo" />
 
         <!-- Total staked supply -->
         <label for="token3_total_staked">Total Staked NFTs:</label>
@@ -75,19 +75,19 @@
         <tbody>
           <tr>
             <td>$FOMO3D</td>
-            <td>{{ token1Revenue.toFixed(2) }}</td>
+            <td>${{ results.token1Revenue }}</td>
           </tr>
           <tr>
             <td>$PET</td>
-            <td>{{ token2Revenue.toFixed(2) }}</td>
+            <td>${{ results.token2Revenue }}</td>
           </tr>
           <tr>
             <td>NFTs</td>
-            <td>{{ token3Revenue.toFixed(2) }}</td>
+            <td>${{ results.token3Revenue }}</td>
           </tr>
           <tr class="total-row">
             <td><strong>Total Daily Revenue</strong></td>
-            <td><strong>${{ totalRevenue.toFixed(2) }}</strong></td>
+            <td><strong>${{ results.totalRevenue }}</strong></td>
           </tr>
         </tbody>
       </table>
@@ -114,32 +114,57 @@ export default {
           userStaked: 0,
         },
       },
-      token1Revenue: 0,
-      token2Revenue: 0,
-      token3Revenue: 0,
-      totalRevenue: 0,
+      results: {
+        token1Revenue: 0,
+        token2Revenue: 0,
+        token3Revenue: 0,
+        totalRevenue: 0,
+      },
       calculated: false,
     };
   },
   methods: {
     calculateRevenue() {
-      const totalStaked1 = this.tokens.token1.totalStaked;
-      const totalStaked2 = this.tokens.token2.totalStaked;
-      const totalStaked3 = this.tokens.token3.totalStaked;
+      // Extract inputs
+      const dailyRevenue = this.dailyRevenue;
 
-      // Calculate the revenue for each token based on the user's staked amount
-      const token1Share = this.tokens.token1.userStaked / totalStaked1;
-      const token2Share = this.tokens.token2.userStaked / totalStaked2;
-      const token3Share = this.tokens.token3.userStaked / totalStaked3;
+      // Define revenue shares
+      const token1Share = 0.69; // 69%
+      const token2Share = 0.015; // 1.5%
+      const token3Share = 0.25; // 25%
 
-      this.token1Revenue = this.dailyRevenue * token1Share;
-      this.token2Revenue = this.dailyRevenue * token2Share;
-      this.token3Revenue = this.dailyRevenue * token3Share;
+      // Step 1: Calculate the revenue allocated for each token
+      const token1RevenuePool = dailyRevenue * token1Share;
+      const token2RevenuePool = dailyRevenue * token2Share;
+      const token3RevenuePool = dailyRevenue * token3Share;
 
-      this.totalRevenue = this.token1Revenue + this.token2Revenue + this.token3Revenue;
+      // Step 2: Calculate the user's share percentage
+      const userSharePercentageToken1 = this.tokens.token1.userStaked / this.tokens.token1.totalStaked;
+      const userSharePercentageToken2 = this.tokens.token2.userStaked / this.tokens.token2.totalStaked;
+      const userSharePercentageToken3 = this.tokens.token3.userStaked / this.tokens.token3.totalStaked;
 
-      this.calculated = true; // Set to true to display the result
+      // Step 3: Calculate the user's daily revenue
+      const userDailyRevenueToken1 = token1RevenuePool * userSharePercentageToken1;
+      const userDailyRevenueToken2 = token2RevenuePool * userSharePercentageToken2;
+      const userDailyRevenueToken3 = token3RevenuePool * userSharePercentageToken3;
+
+      // Total revenue for all tokens
+      const totalRevenue = userDailyRevenueToken1 + userDailyRevenueToken2 + userDailyRevenueToken3;
+
+      // Update results
+      this.results.token1Revenue = this.formatNumber(userDailyRevenueToken1);
+      this.results.token2Revenue = this.formatNumber(userDailyRevenueToken2);
+      this.results.token3Revenue = this.formatNumber(userDailyRevenueToken3);
+      this.results.totalRevenue = this.formatNumber(totalRevenue);
+
+      this.calculated = true;
     },
+    formatNumber(value) {
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
   },
 };
 </script>
@@ -155,7 +180,7 @@ body {
 
 .container {
   min-width: 320px;
-  max-width: 100%;
+  max-width: 70%;
   margin: 0 auto;
   background-color: #1a1a1d;
   padding: 30px;
@@ -269,7 +294,7 @@ label {
 .logo-image {
   display: block;
   margin: 0 auto 20px auto;
-  max-width: 100%;
+  max-width: 80%;
   height: auto;
 }
 
@@ -287,7 +312,7 @@ label {
   color: white;
 }
 
-.results-table th, 
+.results-table th,
 .results-table td {
   padding: 12px;
   border: 1px solid #444;
