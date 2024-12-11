@@ -1,0 +1,294 @@
+<template>
+  <div class="container">
+    <!-- <img src="/img/fomo3d-logo.jpeg" alt="Logo" class="logo-image" /> -->
+
+    <h1>Revenue Share Calculator</h1>
+
+    <!-- Revenue Section -->
+    <div class="card revenue-card">
+      <label for="daily_revenue">Gobbler Daily Revenue:</label>
+      <input type="number" v-model.number="dailyRevenue" id="daily_revenue" min="0" step="0.01"
+        placeholder="Please enter daily revenue" required />
+    </div>
+
+    <!-- Holdings Section -->
+    <div class="holdings">
+      <!-- Token 1 -->
+      <div class="card holdings-card">
+        <!-- <img src="@/assets/fomo3d.jpg" alt="Token 1 Logo" /> -->
+
+        <!-- Total staked supply -->
+        <label for="token1_total_staked">Total Staked $FOMO3D Tokens:</label>
+        <input type="number" v-model.number="tokens.token1.totalStaked" id="token1_total_staked" min="0" step="0.01"
+          placeholder="Total staked tokens" required />
+
+        <!-- User staked supply -->
+        <label for="token1_user_staked">Your Staked $FOMO3D Tokens:</label>
+        <input type="number" v-model.number="tokens.token1.userStaked" id="token1_user_staked" min="0" step="0.01"
+          placeholder="Enter your staked amount" />
+      </div>
+
+      <!-- Token 2 -->
+      <div class="card holdings-card">
+        <!-- <img src="@/assets/pet.jpg" alt="Token 2 Logo" /> -->
+
+        <!-- Total staked supply -->
+        <label for="token2_total_staked">Total Staked $PET Tokens:</label>
+        <input type="number" v-model.number="tokens.token2.totalStaked" id="token2_total_staked" min="0" step="0.01"
+          placeholder="Total staked tokens" required />
+
+        <!-- User staked supply -->
+        <label for="token2_user_staked">Your Staked $PET Tokens:</label>
+        <input type="number" v-model.number="tokens.token2.userStaked" id="token2_user_staked" min="0" step="0.01"
+          placeholder="Enter your staked amount" />
+      </div>
+
+      <!-- Token 3 -->
+      <div class="card holdings-card">
+        <!-- <img src="@/assets/mage.jpg" alt="Token 3 Logo" /> -->
+
+        <!-- Total staked supply -->
+        <label for="token3_total_staked">Total Staked NFTs:</label>
+        <input type="number" v-model.number="tokens.token3.totalStaked" id="token3_total_staked" min="0" step="1"
+          placeholder="Enter total staked NFTs" required />
+
+        <!-- User staked supply -->
+        <label for="token3_user_staked">Your Staked NFTs:</label>
+        <input type="number" v-model.number="tokens.token3.userStaked" id="token3_user_staked" min="0" step="1"
+          placeholder="Enter your staked NFTs" />
+      </div>
+    </div>
+
+    <!-- Calculate Button -->
+    <button @click="calculateRevenue">Calculate</button>
+
+    <!-- Result Section -->
+    <div v-if="calculated">
+      <div class="result">
+        <h2>Calculated Revenue Share:</h2>
+        <label>Token 1 Revenue: ${{ token1Revenue.toFixed(2) }}</label>
+        <label>Token 2 Revenue: ${{ token2Revenue.toFixed(2) }}</label>
+        <label>Token 3 Revenue: ${{ token3Revenue.toFixed(2) }}</label>
+        <label>Total Daily Revenue: ${{ totalRevenue.toFixed(2) }}</label>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      dailyRevenue: 1000000,
+      tokens: {
+        token1: {
+          totalStaked: 1,
+          userStaked: 0,
+        },
+        token2: {
+          totalStaked: 1,
+          userStaked: 0,
+        },
+        token3: {
+          totalStaked: 400,
+          userStaked: 0,
+        },
+      },
+      token1Revenue: 0,
+      token2Revenue: 0,
+      token3Revenue: 0,
+      totalRevenue: 0,
+      calculated: false,
+    };
+  },
+  methods: {
+    calculateRevenue() {
+      const totalStaked1 = this.tokens.token1.totalStaked;
+      const totalStaked2 = this.tokens.token2.totalStaked;
+      const totalStaked3 = this.tokens.token3.totalStaked;
+
+      // Calculate the revenue for each token based on the user's staked amount
+      const token1Share = this.tokens.token1.userStaked / totalStaked1;
+      const token2Share = this.tokens.token2.userStaked / totalStaked2;
+      const token3Share = this.tokens.token3.userStaked / totalStaked3;
+
+      this.token1Revenue = this.dailyRevenue * token1Share;
+      this.token2Revenue = this.dailyRevenue * token2Share;
+      this.token3Revenue = this.dailyRevenue * token3Share;
+
+      this.totalRevenue = this.token1Revenue + this.token2Revenue + this.token3Revenue;
+
+      this.calculated = true; // Set to true to display the result
+    },
+  },
+};
+</script>
+
+<style scoped>
+body {
+  font-family: 'Arial', sans-serif;
+  color: #ffffff;
+  background-color: #0d0d0f;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  min-width: 320px;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #1a1a1d;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.revenue-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #25252a;
+  border-radius: 8px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.revenue-card input[type="number"] {
+  width: calc(100% - 20px);
+  margin: 10px auto;
+  display: block;
+}
+
+.card {
+  background-color: #25252a;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.holdings {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.holdings-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  height: auto;
+  overflow: hidden;
+}
+
+.holdings-card img {
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto 20px auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+input[type="number"] {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #444;
+  background-color: #2d2d33;
+  color: #ffffff;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+input::placeholder {
+  color: #a3a3a3;
+}
+
+button {
+  width: 60%;
+  display: block;
+  margin: 30px auto 10px auto;
+  padding: 12px;
+  background: linear-gradient(90deg, #6a00ff, #8900ff);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #5a00e6, #7a00e6);
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #e3e3e3;
+}
+
+label {
+  font-weight: bold;
+  color: #bfbfbf;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.result {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #25252a;
+  border-radius: 8px;
+  border: 2px solid #6a00ff;
+}
+
+.logo-image {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Media Query for Responsiveness */
+@media screen and (max-width: 768px) {
+  .container {
+      max-width: 90%;
+      padding: 20px;
+  }
+
+  .holdings {
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .holdings-card {
+      width: 100%;
+  }
+
+  .holdings-card img {
+      max-width: 60%;
+  }
+
+  button {
+      width: 80%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+      font-size: 1.5rem;
+  }
+
+  label {
+      font-size: 0.9rem;
+  }
+
+  input[type="number"] {
+      padding: 8px;
+  }
+}
+</style>
