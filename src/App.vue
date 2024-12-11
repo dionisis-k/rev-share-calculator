@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="../public/fomo3d-logo.jpeg" alt="Logo" class="logo-image" />
+    <img src="/fomo3d-logo.jpeg" alt="Logo" class="logo-image" />
 
     <h1>Revenue Share Calculator</h1>
 
@@ -15,7 +15,7 @@
     <div class="holdings">
       <!-- Token 1 -->
       <div class="card holdings-card">
-        <img src="../public/fomo3d.jpg" alt="Token 1 Logo" />
+        <img src="/fomo3d.jpg" alt="Token 1 Logo" />
 
         <!-- Total staked supply -->
         <label for="token1_total_staked">Total Staked $FOMO3D Tokens:</label>
@@ -30,7 +30,7 @@
 
       <!-- Token 2 -->
       <div class="card holdings-card">
-        <img src="../public/pet.jpg" alt="Token 2 Logo" />
+        <img src="/pet.jpg" alt="Token 2 Logo" />
 
         <!-- Total staked supply -->
         <label for="token2_total_staked">Total Staked $PET Tokens:</label>
@@ -45,7 +45,7 @@
 
       <!-- Token 3 -->
       <div class="card holdings-card">
-        <img src="../public/mage.jpg" alt="Token 3 Logo" />
+        <img src="/mage.jpg" alt="Token 3 Logo" />
 
         <!-- Total staked supply -->
         <label for="token3_total_staked">Total Staked NFTs:</label>
@@ -125,7 +125,6 @@ export default {
   },
   methods: {
     calculateRevenue() {
-      // Extract inputs
       const dailyRevenue = this.dailyRevenue;
 
       // Define revenue shares
